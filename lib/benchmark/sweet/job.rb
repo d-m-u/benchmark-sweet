@@ -148,7 +148,10 @@ module Benchmark
 
         JSON.load(IO.read(filename)).each do |v|
           n = v["name"]
-          n.symbolize_keys!
+          n.keys.each do |key|
+            n[(key.to_sym rescue key) || key] = n.delete(key)
+          end
+
           add_entry n, v["metric"], v["samples"]
         end
 
